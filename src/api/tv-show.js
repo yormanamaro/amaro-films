@@ -15,12 +15,40 @@ export class TVShowAPI {
         } catch (err) {
             console.log(err); // Aqui pintam,os el error para ver que esta pasando en tal caso
         }
-        /*return FAKE_POPULARS;*/ // Se debe colocar entre /* el try Catch */ para dasactivalor y que pueda tomar ese fake popular 
+        //return FAKE_POPULARS; // Se debe colocar entre /* el try Catch  para dasactivalor y que pueda tomar ese fake popular 
     }
+
+
+    //////// EJEMPLO PERO USANDO FETCH Y NO AXIOS //////////////////////
+    /*static async fetchPopulars() {
+      try {
+        const response = await fetch(`${BASE_URL}tv/popular${API_KEY_PARAM}`, {
+          method: "GET",
+        });
+
+        const results = await response.json();
+        console.log(results.results);
+        return results.results;
+
+      } catch (err) {
+          console.log(err); // Aqui pintam,os el error para ver que esta pasando en tal caso
+      }
+      //return FAKE_POPULARS;/ // Se debe colocar entre / el try Catch / para dasactivalor y que pueda tomar ese fake popular 
+  }*/
+
+  static async fetchByTitle(title) { // con esta peticion a la api mediante un metodo estatico es para el buscador de series
+    try { // mismo proceso que la peticion anterior solo que con sus elementos particulares de la consulta
+      const response = await axios.get(`${BASE_URL}search/tv${API_KEY_PARAM}&query=${title}`);
+      return response.data.results
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
 }
 
 
-// NOTA: EL (data) ES UN OBJETO DE LA RESPUESTA DE AXIOS ESO NOS VA A TRAER TODA LA INFORMACION DEL OBJETO COMO TAL.
+// NOTA: EL (data) en axios ES UN OBJETO DE LA RESPUESTA DE AXIOS ESO NOS VA A TRAER TODA LA INFORMACION DEL OBJETO COMO TAL.
 // EL STATIC ANTES DE LA FUNCION LO QUE NOS VA A PERMITIR PODER LLAMAR DESDE OTRO ARCHIVO DONDE QIERA UTILIZAR ESA CLASE, LO LLAMAMOS SIN TENER QUE CREAR UNA INSTANCIA DE ESA CLASE SINO QUE SE LLAMARIA COMO UNA INSTANCIA 
    // SIN TENER QUE HACER UN NEW BLA BLA BLA
 
