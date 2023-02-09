@@ -8,10 +8,11 @@ import { TVShowAPI } from "./api/tv-show";
 import {BACKDROP_BASE_URL} from "./config";
 import logoImg from "./assets/images/logo.png"
 import s from "./style.module.css";
-// 
+//
 
 function App() {
-  const [currentTVShow, setCurrentTVShow] = useState(); // Aqui se crean propiedades para manejar el estado de la serie mas popular recuerden que va cambiando por popularidad se llamara (currentTVShow) 
+  const [currentTVShow, setCurrentTVShow] = useState(); // Aqui se crean propiedades para manejar el estado de la serie mas popular recuerden que va cambiando por popularidad se llamara (currentTVShow)
+  const [recomendationList, setRecomentationList ] = useState([]); // Aqui vamos a manejar el estado de la lista de tvshow el cintillo
 
   async function fetchPopulars() { // Estamos haciendo uso de la clase fetchPopulars creada en el archivo de tv-show.js de la api que la dejamos exportada con el nombre de (TVShowAPI). 
     const popularTVShowList = await TVShowAPI.fetchPopulars(); // Vamos almacenar el resultado de la peticion y el await para esperar que nos responda la peticion
@@ -22,16 +23,34 @@ function App() {
 
   async function fetchByTitle(title) { // Esta configuracion es para la parte de serchbar o navegador de la web
     const searchResponse = await TVShowAPI.fetchByTitle(title); // Nos estamos trayendo (fetchByTitle) del archivo de tv-show.js que es donde estamos consolidado las peticiones
-    if (searchResponse && searchResponse.length > 0) {
+    if (searchResponse.length > 0) {
       setCurrentTVShow(searchResponse[0])
     }
   }
 
+  async function fetchRecomendations(tvShowId) { // Esta configuracion de la lista de de peliculas recomendadas
+    const recomendationListResp = await TVShowAPI.fetchRecomendations(tvShowId); // Nos estamos trayendo (fetchRecomendations) del archivo de tv-show.js que es donde estamos consolidado las peticiones
+    if (recomendationListResp.length > 0) {  // Aqui es misma logica que la anterios
+      setRecomentationList(recomendationListResp.slice(0,10)); // Aqui debemos actualizar nuestro usestate ya que se debe crear uno nuevo para ese elemento ya que se estara actualizando cada vez que interactuemos 
+    }
+  };
+
+  function updateCurrentTVShow(tvShow) {   // Aqui vamos actualizar la hacer click en un tvshow
+    setCurrentTVShow(tvShow);
+  }; // Aqui vamos actualizar la hacer click en un tvshow
+
+  
   console.log(currentTVShow); // Para ver donde esta ubicada esa imagen dentro del contexto del objeto.
 
   useEffect(() => { // Es necesario llamar a useffect ya que esa serie popular va a cambiar nunca sera la misma ya que si otra tiene mas puntaje sera esa y asi...
     fetchPopulars();
-  }, []) // No se agrega nada en el array por que no se estan manejando dependencias, solo una hacia la lista fetchPopulars y eso lo da la api, si fuera un adi creado
+  }, []); // No se agrega nada en el array por que no se estan manejando dependencias, solo una hacia la lista fetchPopulars y eso lo da la api, si fuera un adi creado
+
+  useEffect(() => { // Con este useEffect vamos a manejar el ciclo de la lista de series recomendadas ya que se va a estar actualizando contantemente
+    if (currentTVShow) {
+      fetchRecomendations(currentTVShow.id);
+    }
+  }, [currentTVShow]); // Aqui pasamos el currentTVShow porque es el que mnos va a mostar ya actualizado
 
   return (
     <div className={s.main_container} 
@@ -59,7 +78,12 @@ function App() {
         {currentTVShow && <TVShowDetail tvShow={currentTVShow} />}
       </div>
       <div className={s.recommended_shows}>
-        {currentTVShow && <TVShowList />}
+        {currentTVShow && (
+          <TVShowList 
+            onClickItem={updateCurrentTVShow} // Aqui estamos trayendo como props la funcion updateCurrentTVShow y la vamos a ejecutar haciendo click 
+            TVShowList={recomendationList} // Y aqui nos vamos a traer la lista como props igual
+          />
+        )}
       </div>
     </div>
   );

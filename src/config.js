@@ -6,5 +6,7 @@ const API_KEY_PARAM = "?api_key=4cd0e20e88279e72f417c2cd4a8b508b"; // Cada empoi
 
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original"; // Aqui estamops yomando la base de la url de  la api para las imagenes
 
-export {BASE_URL, API_KEY_PARAM, BACKDROP_BASE_URL}; // Se agrega como export para que pueda ser usada en el resto del proyecto.
+const SMALL_IMG_COVER_BASE_URL = "https://image.tmdb.org/t/p/w300"; // Para traernos las imagenes con tamano de 300px
+
+export {BASE_URL, API_KEY_PARAM, BACKDROP_BASE_URL, SMALL_IMG_COVER_BASE_URL}; // Se agrega como export para que pueda ser usada en el resto del proyecto.
 

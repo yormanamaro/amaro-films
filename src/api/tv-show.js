@@ -16,7 +16,7 @@ export class TVShowAPI {
             console.log(err); // Aqui pintam,os el error para ver que esta pasando en tal caso
         }
         //return FAKE_POPULARS; // Se debe colocar entre /* el try Catch  para dasactivalor y que pueda tomar ese fake popular 
-    }
+    };
 
 
     //////// EJEMPLO PERO USANDO FETCH Y NO AXIOS //////////////////////
@@ -43,9 +43,19 @@ export class TVShowAPI {
     } catch (err) {
       console.log(err)
     }
-  }
+  };
 
-}
+  // Aqui vamos a construir la peticion a nuestra api para e; TVShowlist
+  static async fetchRecomendations(tvShowId) {
+    try {  
+      const response = await axios.get(`${BASE_URL}tv/${tvShowId}/recommendations${API_KEY_PARAM}`);
+      return response.data.results
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+};
 
 
 // NOTA: EL (data) en axios ES UN OBJETO DE LA RESPUESTA DE AXIOS ESO NOS VA A TRAER TODA LA INFORMACION DEL OBJETO COMO TAL.
