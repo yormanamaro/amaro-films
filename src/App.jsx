@@ -1,5 +1,5 @@
 // Este es el orden en que deben ir la importaciones
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect, useCallback, useMemo } from 'react'; 
 import Logo from "./components/Logo/Logo";
 import SearchBar from "./components/SearchBar/SearchBar";
 import TVShowDetail from "./components/TVShowDetail/TVShowDetail";
@@ -14,12 +14,35 @@ function App() {
   const [currentTVShow, setCurrentTVShow] = useState(); // Aqui se crean propiedades para manejar el estado de la serie mas popular recuerden que va cambiando por popularidad se llamara (currentTVShow)
   const [recomendationList, setRecomentationList ] = useState([]); // Aqui vamos a manejar el estado de la lista de tvshow el cintillo
 
+
+  // ESTA ES NORMAL VERSION
   async function fetchPopulars() { // Estamos haciendo uso de la clase fetchPopulars creada en el archivo de tv-show.js de la api que la dejamos exportada con el nombre de (TVShowAPI). 
     const popularTVShowList = await TVShowAPI.fetchPopulars(); // Vamos almacenar el resultado de la peticion y el await para esperar que nos responda la peticion
     if (popularTVShowList && popularTVShowList.length > 0) {  // Se pregunta si la lista es mayor a 0 su cantidad en concreto
       setCurrentTVShow(popularTVShowList[0]); // y si es mayor a 0 actualizar el mas popular y mostrar el primero, para actualizar su modificador setcurrentTVShow
     }
-  }
+  };
+
+  // USECALLBACK VERSION // El resultado es fechpopulars // hace que el procesamiento se mas fluido
+  /*const SE INYECTAN LOS NUEVOS HUKS
+    const fetchPopulars  = useCallback(async () => {
+    const popularTVShowList = await TVShowAPI.fetchPopulars(); // Vamos almacenar el resultado de la peticion y el await para esperar que nos responda la peticion
+    if (popularTVShowList && popularTVShowList.length > 0) {  // Se pregunta si la lista es mayor a 0 su cantidad en concreto
+      setCurrentTVShow(popularTVShowList[0]); // y si es mayor a 0 actualizar el mas popular y mostrar el primero, para actualizar su modificador setcurrentTVShow
+    }
+  }, [currentTVShow]);*/
+
+
+  // USEMEMO VERSION // El resultado es current tv show
+  /*const fetchPopulars = useMemo(() => {
+    return async () => {
+      const popularTVShowList = await TVShowAPI.fetchPopulars(); // Vamos almacenar el resultado de la peticion y el await para esperar que nos responda la peticion
+    if (popularTVShowList && popularTVShowList.length > 0) {  // Se pregunta si la lista es mayor a 0 su cantidad en concreto
+      setCurrentTVShow(popularTVShowList[0]); // y si es mayor a 0 actualizar el mas popular y mostrar el primero, para actualizar su modificador setcurrentTVShow
+      } 
+    };
+  }, [currentTVShow]);*/ 
+
 
   async function fetchByTitle(title) { // Esta configuracion es para la parte de serchbar o navegador de la web
     const searchResponse = await TVShowAPI.fetchByTitle(title); // Nos estamos trayendo (fetchByTitle) del archivo de tv-show.js que es donde estamos consolidado las peticiones
