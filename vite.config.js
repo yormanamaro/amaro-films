@@ -24,5 +24,13 @@ export default defineConfig({
     },*/
     cache: true, // Habilitar una cache para optimizar el compilado de los recursos que caen en dist
     minity: true, // Habilitar la opcion de compresion optimizada para minimizar el tamano de los archivos generados.
+    mode: "production", // Habilitar el modo de entorno para el cual estamos generando el build. Especificar el entorno en que estamos trabajando
+    chunks: true, // Habilitar la configuracion del build mediante chunks parcelados. ()
+    moduleBundling: true, // Habilitar la configuracion para minimizar el tamano de las librerias del proyecto que pasaran a produccion.
+    prerenderPaths: ["/"],// Pre-carga de modulos de rutas, este guarda una reserva en memoria para cargar algun elemento (OPCIONAL)
+    modulePreload: true, // Pre-carga general del codigo antes de visitarse (OPCIONAL)
+    outDir: "build",// Podemos especificar otro directorio de salida, el nombre como tal, cambiarle el nombre dist por otro.
+    devCode: true, // Habilitar el inspector de recomendaciones de cosas que te puedan hacer falta
+    debug: true, // Habilitar el inspector de recomendaciones y errores
   }  
 });
